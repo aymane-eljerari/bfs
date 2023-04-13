@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "graph.h"
+#include "constants.h"
 
 /* Graph operations */
 void initGraph(Graph *g, int vertexCount) {
@@ -20,10 +21,12 @@ void addEdge(Graph *g, int src, int dest) {
 
 void generate(Graph *g, int vertexCount, int maxDegree) {
     initGraph(g, vertexCount);
-    srand(time(NULL));
+    
+    if (RANDOM_GENERATE){srand(time(NULL));}
+    else{srand(SEED);}
 
     for (int i = 0; i < vertexCount; i++) {
-        int degree = rand() % (maxDegree + 1);
+        int degree = rand() % maxDegree;
         for (int j = 0; j < degree; j++) {
             int dest = rand() % vertexCount;
             if (i != dest && g->adjMatrix[i][dest] == 0) {
