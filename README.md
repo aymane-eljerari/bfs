@@ -56,5 +56,7 @@ CUDA® is a parallel computing platform and programming model developed by NVIDI
 
 ### References
 
+https://en.wikipedia.org/wiki/Breadth-first_search
 
+https://docs.nvidia.com/cuda/cuda-c-programming-guide/
 
