@@ -8,6 +8,9 @@ This project analyzes three implementations of breadth-first search:
 
 ### Prerequisites
 
+C language
+GPUs
+[add more]
 
 ### Instructions
 
@@ -18,12 +21,12 @@ make
 ./bfs
 ```
 
+
+## Project Overview
+
 Sample adjacency list output with 10 vertices and a maximum degree of 3.
 
 ![Adjacency List](img/adj_list.png)
-
-
-## Project Overview
 
 ### Problem
 
