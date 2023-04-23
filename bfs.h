@@ -4,7 +4,7 @@
 #include "graph.h"
 #include "queue.h"
 
-void bfs(Graph *g, int startVertex);
+bool bfsSearch(Graph *g, int startVertex, int endVertex);
 
 #endif
 

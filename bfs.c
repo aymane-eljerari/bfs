@@ -7,7 +7,7 @@
 #include "bfs.h"
 
 /* Breadth-first search algorithm */
-void bfs(Graph *g, int startVertex) {
+bool bfsSearch(Graph *g, int startVertex, int targetVertex) {
     bool visited[g->vertexCount];
     for (int i = 0; i < g->vertexCount; i++) {
         visited[i] = false;
@@ -21,7 +21,10 @@ void bfs(Graph *g, int startVertex) {
 
     while (!isQueueEmpty(&q)) {
         int currVertex = dequeue(&q);
-        printf("%d ", currVertex);
+
+        if (currVertex == targetVertex) {
+            return true;
+        }
 
         for (int i = 0; i < g->vertexCount; i++) {
             if (g->adjMatrix[currVertex][i] == 1 && !visited[i]) {
@@ -30,4 +33,6 @@ void bfs(Graph *g, int startVertex) {
             }
         }
     }
+
+    return false;
 }

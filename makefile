@@ -3,7 +3,7 @@ CFLAGS=-Wall -pedantic
 
 SRCS=main.c graph.c queue.c bfs.c
 OBJS=$(SRCS:.c=.o)
-EXEC=bfs
+EXEC=out
 
 all: $(EXEC)
 
