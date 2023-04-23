@@ -2,3 +2,4 @@
 bfs
 *.o
 .DS_Store
+out
