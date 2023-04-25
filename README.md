@@ -28,26 +28,6 @@ First, find your GPU model:
 ```
 nvidia-smi
 ```
-The output in this case:
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 450.57       Driver Version: 450.57       CUDA Version: 11.0     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  Quadro P1000        Off  | 00000000:01:00.0 Off |                  N/A |
-| N/A   29C    P8    N/A /  N/A |    344MiB /  4039MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-                                                                               
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|    0   N/A  N/A      4000      G   /usr/bin/X                        341MiB |
-+-----------------------------------------------------------------------------+
 
 Next, load the compiler for your GPU compiler:
 ```
