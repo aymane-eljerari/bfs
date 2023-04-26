@@ -5,6 +5,7 @@
 #include "queue.h"
 
 bool bfsSearch(Graph *g, int startVertex, int endVertex);
+bool bfsSearch_OMP(Graph *g, int startVertex, int targetVertex);
 
 #endif
 
