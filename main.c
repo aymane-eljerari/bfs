@@ -28,20 +28,28 @@ int main() {
     int maxDegree = 5;
 
     struct timespec start, end;
-    double timeElapsed;
+    double timeElapsed_serial, timeElapsed_OMP;
 
-    bool found;
+    bool foundSerial, foundOMP;
 
     generate(&g, vertexCount, maxDegree);
 
     clock_gettime(CLOCK_MONOTONIC, &start);
-    found = bfsSearch(&g, 0, 230);
+    foundSerial = bfsSearch(&g, 0, 230);
     clock_gettime(CLOCK_MONOTONIC, &end);
 
-    timeElapsed = interval(start, end) / 1000;
 
-    if (found){
-        printf("\nTime elapsed: %f ms\n", timeElapsed);
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    foundOMP = bfsSearch_OMP(&g, 0, 230);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    timeElapsed_serial = interval(start, end) / 1000;
+    timeElapsed_OMP = interval(start, end) / 1000;
+
+
+    if (foundSerial){
+        printf("\nSerial time elapsed: %f ms\n", timeElapsed_serial);
+        printf("\nSerial time elapsed: %f ms\n", timeElapsed_OMP);
     }
     else{
         printf("\nCould not find vertex\n");
