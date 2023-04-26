@@ -1,17 +1,38 @@
+# CC=gcc
+# CFLAGS=-Wall -pedantic
+
+# SRCS=main.c graph.c queue.c bfs.c
+# OBJS=$(SRCS:.c=.o)
+# EXEC=out
+
+# all: $(EXEC)
+
+# $(EXEC): $(OBJS)
+# 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+
+# %.o: %.c
+# 	$(CC) $(CFLAGS) -c $< -o $@
+
+# clean:
+# 	rm -f $(OBJS) $(EXEC)
+
 CC=gcc
-CFLAGS=-Wall -pedantic
+CFLAGS=
 
-SRCS=main.c graph.c queue.c bfs.c
-OBJS=$(SRCS:.c=.o)
-EXEC=out
+SOURCES=graph.c queue.c bfs.c main.c
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=out
 
-all: $(EXEC)
+all: $(SOURCES) $(EXECUTABLE)
 
-$(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@
 
-%.o: %.c
+bfs.o: bfs.c
+	$(CC) $(CFLAGS) -fopenmp -c bfs.c -o bfs.o
+
+.c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(OBJECTS) $(EXECUTABLE)

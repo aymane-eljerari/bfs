@@ -3,13 +3,18 @@
 #include <stdbool.h>
 #include <omp.h>
 
-#include "graph.h"
-#include "queue.h"
-#include "bfs.h"
+#include "include/bfs.h"
+#include "include/graph.h"
+#include "include/queue.h"
+
 
 /* Sequential BFS */
 bool bfsSearch(Graph *g, int startVertex, int targetVertex) {
-    bool visited[g->vertexCount] = {false};
+    bool visited[g->vertexCount];
+    int i = 0;
+    for (; i < g->vertexCount; i++) {
+        visited[i] = false;
+    }
 
     Queue q;
     initQueue(&q);
@@ -24,7 +29,7 @@ bool bfsSearch(Graph *g, int startVertex, int targetVertex) {
             return true;
         }
 
-        for (int i = 0; i < g->vertexCount; i++) {
+        for (i = 0; i < g->vertexCount; i++) {
             if (g->adjMatrix[currVertex][i] == 1 && !visited[i]) {
                 visited[i] = true;
                 enqueue(&q, i);
@@ -36,11 +41,16 @@ bool bfsSearch(Graph *g, int startVertex, int targetVertex) {
 }
 
 bool bfsSearch_OMP(Graph *g, int startVertex, int targetVertex) {
-    bool visited[g->vertexCount] = {false};
-    memset(visited, false, g->vertexCount * sizeof(bool));
+    bool visited[g->vertexCount];
+    int i = 0;
+    int j = 0;
+    for (; i < g->vertexCount; i++) {
+        visited[i] = false;
+    }
+
 
     Queue q;
-    initQueue(&q, g->vertexCount);
+    initQueue(&q);
 
     visited[startVertex] = true;
     enqueue(&q, startVertex);
@@ -49,21 +59,21 @@ bool bfsSearch_OMP(Graph *g, int startVertex, int targetVertex) {
         int queueSize = queueLength(&q);
         int *layer = (int *)malloc(queueSize * sizeof(int));
 
-        for (int i = 0; i < queueSize; i++) {
+        for (i = 0; i < queueSize; i++) {
             layer[i] = dequeue(&q);
         }
 
         bool found = false;
 
         #pragma omp parallel for reduction(|:found)
-        for (int i = 0; i < queueSize; i++) {
+        for (i = 0; i < queueSize; i++) {
             int currVertex = layer[i];
 
             if (currVertex == targetVertex) {
                 found |= true;
             }
 
-            for (int j = 0; j < g->vertexCount; j++) {
+            for (j = 0; j < g->vertexCount; j++) {
                 if (g->adjMatrix[currVertex][j] == 1 && !visited[j]) {
                     visited[j] = true;
                     enqueue(&q, j);

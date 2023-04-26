@@ -1,8 +1,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "constants.h"
-#include "queue.h"
+#include "include/constants.h"
+#include "include/queue.h"
+
+
 
 /* Queue operations */
 void initQueue(Queue *q) {

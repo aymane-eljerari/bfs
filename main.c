@@ -1,13 +1,15 @@
+#include "include/graph.h"
+#include "include/queue.h"
+#include "include/bfs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 
+#define _POSIX_C_SOURCE 200809L
 
-#include "graph.h"
-#include "queue.h"
-#include "bfs.h"
 
 double interval(struct timespec start, struct timespec end){
   struct timespec temp;
@@ -34,14 +36,14 @@ int main() {
 
     generate(&g, vertexCount, maxDegree);
 
-    clock_gettime(CLOCK_MONOTONIC, &start);
+    clock_gettime(CLOCK_REALTIME, &start);
     foundSerial = bfsSearch(&g, 0, 230);
-    clock_gettime(CLOCK_MONOTONIC, &end);
+    clock_gettime(CLOCK_REALTIME, &end);
 
 
-    clock_gettime(CLOCK_MONOTONIC, &start);
-    foundOMP = bfsSearch_OMP(&g, 0, 230);
-    clock_gettime(CLOCK_MONOTONIC, &end);
+    // clock_gettime(CLOCK_REALTIME, &start);
+    // foundOMP = bfsSearch_OMP(&g, 0, 230);
+    // clock_gettime(CLOCK_REALTIME, &end);
 
     timeElapsed_serial = interval(start, end) / 1000;
     timeElapsed_OMP = interval(start, end) / 1000;
