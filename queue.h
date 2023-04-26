@@ -14,6 +14,7 @@ typedef struct {
 void initQueue(Queue *q);
 bool isQueueEmpty(Queue *q);
 bool isQueueFull(Queue *q);
+int queueLength(Queue *q);
 void enqueue(Queue *q, int val);
 int dequeue(Queue *q);
 

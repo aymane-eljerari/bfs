@@ -17,6 +17,10 @@ bool isQueueFull(Queue *q) {
     return ((q->rear+1)%MAX_QUEUE_SIZE == q->front);
 }
 
+int queueLength(Queue *q) {
+    return (q->rear - q->front + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
+}
+
 void enqueue(Queue *q, int val) {
     if (isQueueFull(q)) {
         printf("Queue overflow\n");
