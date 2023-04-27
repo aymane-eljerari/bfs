@@ -41,6 +41,9 @@ void generate(Graph *g, int vertexCount, int maxDegree) {
 
 void printAdjacencyMatrix(Graph *g) {
     int i, j;
+
+    printf("\nAdjacency Matrix:\n\n");  
+
     for (i = 0; i < g->vertexCount; i++){
         for (j = 0; j < g->vertexCount; j++){
             printf("%d ", g->adjMatrix[i][j]);

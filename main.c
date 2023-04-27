@@ -1,14 +1,13 @@
-#include "include/graph.h"
-#include "include/queue.h"
-#include "include/bfs.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
 
-#define _POSIX_C_SOURCE 200809L
+#include "include/graph.h"
+#include "include/queue.h"
+#include "include/bfs.h"
+
 
 
 double interval(struct timespec start, struct timespec end){
@@ -22,36 +21,30 @@ double interval(struct timespec start, struct timespec end){
   return (((double)temp.tv_sec) + ((double)temp.tv_nsec)*1.0e-9);
 }
 
+
 /* Test the algorithm */
 int main() {
-
     Graph g;
-    int vertexCount = 10000;
-    int maxDegree = 5;
-
+    int vertexCount = 100;
+    int maxDegree = 10;
     struct timespec start, end;
-    double timeElapsed_serial, timeElapsed_OMP;
+    double timeElapsed_serial;
 
-    bool foundSerial, foundOMP;
+    bool foundSerial;
 
+    printf("\nGenerating graph...\n");
     generate(&g, vertexCount, maxDegree);
+    // printAdjacencyMatrix(&g);
 
+    printf("\nRunning Serial BFS\n");
     clock_gettime(CLOCK_REALTIME, &start);
-    foundSerial = bfsSearch(&g, 0, 230);
+    foundSerial = bfsSearch(&g, 0, 10);
     clock_gettime(CLOCK_REALTIME, &end);
-
-
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundOMP = bfsSearch_OMP(&g, 0, 230);
-    // clock_gettime(CLOCK_REALTIME, &end);
-
-    timeElapsed_serial = interval(start, end) / 1000;
-    timeElapsed_OMP = interval(start, end) / 1000;
-
+    
 
     if (foundSerial){
-        printf("\nSerial time elapsed: %f ms\n", timeElapsed_serial);
-        printf("\nSerial time elapsed: %f ms\n", timeElapsed_OMP);
+        timeElapsed_serial = interval(start, end) / 1000000;
+        printf("\nSerial time   : %f µs\n", timeElapsed_serial);
     }
     else{
         printf("\nCould not find vertex\n");
@@ -59,4 +52,5 @@ int main() {
     
 
     return 0;
+    
 }
