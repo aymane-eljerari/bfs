@@ -16,11 +16,11 @@ bool isQueueEmpty(Queue *q) {
 }
 
 bool isQueueFull(Queue *q) {
-    return ((q->rear+1)%MAX_QUEUE_SIZE == q->front);
+    return (q->rear == MAX_QUEUE_SIZE - 1);
 }
 
 int queueLength(Queue *q) {
-    return (q->rear - q->front + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
+    return (q->rear - q->front + 1);
 }
 
 void enqueue(Queue *q, int val) {
@@ -30,7 +30,7 @@ void enqueue(Queue *q, int val) {
     } else if (isQueueEmpty(q)) {
         q->front = q->rear = 0;
     } else {
-        q->rear = (q->rear+1)%MAX_QUEUE_SIZE;
+        q->rear++;
     }
     q->data[q->rear] = val;
 }
@@ -45,7 +45,16 @@ int dequeue(Queue *q) {
         q->front = q->rear = -1;
     } else {
         val = q->data[q->front];
-        q->front = (q->front+1)%MAX_QUEUE_SIZE;
+        q->front++;
     }
     return val;
+}
+
+void printQueue(Queue *q) {
+    int i;
+    printf("Queue: ");
+    for (i = q->front; i <= q->rear; i++) {
+        printf("%d ", q->data[i]);
+    }
+    printf("\n");
 }
