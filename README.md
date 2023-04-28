@@ -16,11 +16,10 @@ GPUs
 
 ### Instructions
 
-To run the experiment, compile and execute using the following terminal commands.
+To run the experiment, compile and execute using the following terminal command.
 
 ```
-make
-./bfs
+make clean && make && ./bfs
 ```
 
 
