@@ -41,8 +41,6 @@
 # clean:
 # 	rm -f $(OBJECTS) $(EXECUTABLE)
 
-
-
 CC=gcc
 CFLAGS=-Wall
 OMPFLAG="-I/opt/homebrew/opt/libomp/include"
