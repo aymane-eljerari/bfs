@@ -1,13 +1,12 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 
-
-#include "graph.h"
-#include "queue.h"
-#include "bfs.h"
+#include "include/graph.h"
+#include "include/queue.h"
+#include "include/bfs.h"
 
 double interval(struct timespec start, struct timespec end){
   struct timespec temp;
@@ -20,28 +19,50 @@ double interval(struct timespec start, struct timespec end){
   return (((double)temp.tv_sec) + ((double)temp.tv_nsec)*1.0e-9);
 }
 
+
 /* Test the algorithm */
 int main() {
+    Graph g1, g2;
 
-    Graph g;
-    int vertexCount = 10000;
-    int maxDegree = 5;
+    int vertexCount = 80000;
+    int maxDegree = 50;
 
-    struct timespec start, end;
-    double timeElapsed;
+    int start_vertex = 0;
+    int end_vertex = 34018;
 
-    bool found;
+    struct timespec start_S, end_S, start_P, end_P;
+    double timeElapsed_serial, timeElapsed_parallel;
 
-    generate(&g, vertexCount, maxDegree);
+    bool foundSerial, foundParallel;
+    
 
-    clock_gettime(CLOCK_MONOTONIC, &start);
-    found = bfsSearch(&g, 0, 230);
-    clock_gettime(CLOCK_MONOTONIC, &end);
+    printf("\nGenerating Graph with %d vertices..\n", vertexCount);
+    generate(&g1, vertexCount, maxDegree);
+    generate(&g2, vertexCount, maxDegree);
+    
+    // printAdjacencyMatrix(&g1);
+    // printAdjacencyMatrix(&g2);
 
-    timeElapsed = interval(start, end) / 1000;
+    printf("\nRunning Serial BFS\n");
+    clock_gettime(CLOCK_REALTIME, &start_S);
+    foundSerial = bfsSearch(&g1, start_vertex, end_vertex);
+    clock_gettime(CLOCK_REALTIME, &end_S);
 
-    if (found){
-        printf("\nTime elapsed: %f ms\n", timeElapsed);
+    printf("\nRunning Parallel BFS\n");
+    clock_gettime(CLOCK_REALTIME, &start_P);
+    foundParallel = bfsSearch_OMP(&g2, start_vertex, end_vertex);
+    clock_gettime(CLOCK_REALTIME, &end_P);
+    
+
+    if (foundSerial){
+        timeElapsed_serial = interval(start_S, end_S);
+        printf("\nSerial time   : %f seconds\n", timeElapsed_serial);
+
+    }
+    if (foundParallel){
+        timeElapsed_parallel = interval(start_P, end_P);
+        printf("\nParallel time : %f seconds\n", timeElapsed_parallel);
+        printf("\nSpeedup : %.2f\n\n", timeElapsed_serial/timeElapsed_parallel);
     }
     else{
         printf("\nCould not find vertex\n");
@@ -49,4 +70,5 @@ int main() {
     
 
     return 0;
+    
 }
