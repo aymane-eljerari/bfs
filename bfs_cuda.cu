@@ -14,6 +14,7 @@
 
 #define BLOCKS 16
 #define THREADS 256
+#define MAX_VERTEX_COUNT 1000
 
 
 
@@ -146,135 +147,75 @@ void printQueue(Queue *q) {
 
 /********************************/
 
-// __global__ void kernel_cuda_simple(int **v_adj_begin, int **v_adj_list, int **result, int num_vertices, int n)
-// {
-//     /* 
-//         CUDA implementation 
-//         v_adj_list: concatenation of all adjacency lists of all vertices
-//         v_adj_begin: array of size V, storing offsets into previous array
-//         v_adj_length: array of size V, storing length of every adjacency list 
-//     */
-//     int tid = blockIdx.x * blockDim.x + threadIdx.x;
-//     int num_threads = blockDim.x * gridDim.x
 
-//     for (int v = 0; v < num_vertices; v += num_threads)
-//     {
-//         int vertex = v + tid;
+__device__ bool bfs(Graph *graph, int start, int finish) {
+    int vertexCount = graph->vertexCount;
+    int **adjMatrix = graph->adjMatrix;
 
-//         if (vertex < num_vertices)
-//         {
-//             for (int n = 0; n < v_adj_length[vertex]; n++)
-//             {
-//                 int neighbor = v_adj_list[v_adj_begin[vertex] + n]
+    // Initialize visited and queue arrays
+    __shared__ bool visited[MAX_VERTEX_COUNT];
+    __shared__ int queue[MAX_VERTEX_COUNT];
+    __shared__ int front;
+    __shared__ int rear;
 
-//                 if (result[neighbor] > result[vertex] + 1)
-//                 {
-//                     result[neighbor] = result[vertex] + 1;
-//                     *still_running = true;
-//                 }
-//                 }
-//         }
-//     }
-// }
+    for (int i = threadIdx.x; i < vertexCount; i += blockDim.x) {
+        visited[i] = false;
+    }
 
-// void run()
-// {
-//     bool *still_running = true;
+    if (threadIdx.x == 0) {
+        visited[start] = true;
+        front = -1;
+        rear = -1;
+        queue[++rear] = start;
+    }
 
-//     while (*still_running)
-//     {
-//         cudaMemcpy(k_still_running, &false_value, sizeof(bool) * 1, cudaMemcpyHostToDevice);
-//         kernel_cuda_simple<<<BLOCKS, THREADS>>>();
-//         cudaMemcpy(still_running, k_still_running, sizeof(bool) * 1, cudaMemcpyDeviceToHost);
-//     }
-//     cudaThreadSynchronize();
-// }
+    __syncthreads();
 
+    // Perform BFS
+    while (true) {
+        __syncthreads();
 
-// __global__ void bfs_kernel(int *adj_matrix, int *queue, bool *visited, int *distance, int *parent, int source, int level, int num_vertices)
-// {
-//     int tid = blockIdx.x * blockDim.x + threadIdx.x;
+        if (front == rear) {
+            // Queue is empty
+            break;
+        }
 
-//     if (tid < level)
-//     {
-//         int node = queue[tid];
-//         visited[node] = true;
+        int vertex = -1;
 
-//         for (int neighbor = 0; neighbor < num_vertices; neighbor++)
-//         {
-//             if (adj_matrix[node*num_vertices+neighbor] != 0 && !visited[neighbor])
-//             {
-//                 visited[neighbor] = true;
-//                 distance[neighbor] = distance[node] + 1;
-//                 parent[neighbor] = node;
-//                 queue[level++] = neighbor;
-//             }
-//         }
-//     }
-// }
+        if (threadIdx.x == 0) {
+            // Dequeue a vertex from queue
+            vertex = queue[++front];
+        }
+        printf("vertex: %d\n", vertex);
 
-// __global__ void bfs(int *adj_matrix, int *queue, bool *visited, int *distance, int *parent, int source, int num_vertices)
-// {
-//     int level = 0;
-//     queue[level] = source;
-//     visited[source] = true;
+        __syncthreads();
 
-//     while (level < num_vertices)
-//     {
-//         int num_blocks = (level + BLOCK_SIZE - 1) / BLOCK_SIZE;
-//         bfs_kernel<<<num_blocks, BLOCK_SIZE>>>(adj_matrix, queue, visited, distance, parent, source, level, num_vertices);
-//         cudaDeviceSynchronize();
-//         level += BLOCK_SIZE * num_blocks;
-//     }
-// }
+        if (vertex == finish) {
+            // Path found
+            return true;
+        }
+        printf("threadidx: %d\n", threadIdx.x);
+        printf("vertexCount: %d\n", vertexCount);
+        for (int i = threadIdx.x; i < vertexCount; i += blockDim.x) {
+            printf("adjMatrix[vertex][i]: %d\n", adjMatrix[vertex][i]);
 
+            if (adjMatrix[vertex][i] == 1 && !visited[i]) {
+                
+                visited[i] = true;
 
-// void bfs_omp(Graph *g, int startVertex, int targetVertex)
-// {
+                // Enqueue the vertex
+                int newRear = atomicAdd(&rear, 1);
+                queue[newRear] = i;
+            }
+        }
+    }
 
-//     bool visited[g->vertexCount];
-//     int i, j;
-//     for (i = 0; i < g->vertexCount; i++) {
-//         visited[i] = false;
-//     }
+    // Path not found
+    return false;
+}
 
-//     Queue q;
-//     initQueue(&q);
-
-//     visited[startVertex] = true;
-//     enqueue(&q, startVertex);
-
-//     bool found = false; // shared variable to indicate whether targetVertex has been found
-
-//     while (!isQueueEmpty(&q)) {
-//         int currVertex = dequeue(&q);
-
-//         #pragma omp parallel for shared(found)
-//         for (j = 0; j < g->vertexCount; j++) {
-//             if (g->adjMatrix[currVertex][j] == 1 && !visited[j]) {
-//                 visited[j] = true;
-//                 enqueue(&q, j);
-//                 if (j == targetVertex) {
-//                     found = true;
-//                 }
-//             }
-//         }
-
-//         if (found) {
-//             break; // exit the while loop early if targetVertex has been found
-//         }
-//     }
-
-//     return found;
-// }
-
-__global__ void bfs_kernel(Graph *d_graph)
-{
-    int vertexCount = d_graph->vertexCount;
-    int **adjMatrix= d_graph->adjMatrix;
-
-    printf("vertexCount: %d\n", vertexCount);
-
+__global__ void bfs_kernel(Graph *graph, int start, int finish, bool *found) {
+    *found = bfs(graph, start, finish);
 }
 
 
@@ -285,18 +226,18 @@ int main() {
     cudaSetDevice(0);
 
     // GPU Timing variables
-    // cudaEvent_t start, stop;
-    // float elapsed_gpu;
+    cudaEvent_t start, stop;
+    float elapsed_gpu;
 
     // Allocate Host Memory
     Graph h_graph;
-    int vertexCount = 10;
-    int maxDegree = 5;
+    int vertexCount = MAX_VERTEX_COUNT;
+    int maxDegree = 10;
 
     // Initialize Host Memory
     generate(&h_graph, vertexCount, maxDegree);
 
-    printAdjacencyMatrix(&h_graph);
+    // printAdjacencyMatrix(&h_graph);
 
     // Allocate device memory for the Graph Struct
     Graph *d_graph;
@@ -326,34 +267,46 @@ int main() {
     cudaFree(d_adjMatrix_data);
 
 
+    bool h_found;
+    bool *d_found;
+    cudaMalloc(&d_found, sizeof(bool));
+
 
     /* GPU Implementation */
 
     // Create the CUDA events
-    // cudaEventCreate(&start);
-    // cudaEventCreate(&stop);
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
 
-    // cudaEventRecord(start, 0);
-
-    // Initialize Device Memory
-
+    int source = 5;
+    int target = 8;
 
     /* Kernel */
-    bfs_kernel<<<1,1>>>(d_graph);
+    bfs_kernel<<<1, 16>>>(d_graph, source, target, d_found);
+    // cudaDeviceSynchronize();
+
+    cudaMemcpy(&h_found, d_found, sizeof(bool), cudaMemcpyDeviceToHost);
+
+    if (h_found) {
+        printf("Path found from %d to %d\n", source, target);
+    } else {
+        printf("No path found from %d to %d\n", source, target);
+    }
     
 
     // Stop and destroy the timer
-    // cudaEventRecord(stop,0);
-    // cudaEventSynchronize(stop);
-    // cudaEventElapsedTime(&elapsed_gpu, start, stop);
-    // printf("\nGPU time: %f (msec)\n", elapsed_gpu);
-    // cudaEventDestroy(start);
-    // cudaEventDestroy(stop);
+    cudaEventRecord(stop,0);
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&elapsed_gpu, start, stop);
+    printf("\nGPU time: %f (msec)\n", elapsed_gpu);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
 
     // Free the memory
     cudaFree(d_graph);
-
+    cudaFree(d_found);
 
     return 0;
 }
