@@ -24,11 +24,11 @@ double interval(struct timespec start, struct timespec end){
 int main() {
     Graph g1, g2;
 
-    int vertexCount = 80000;
-    int maxDegree = 50;
+    int vertexCount = 10000;
+    int maxDegree = 25;
 
     int start_vertex = 0;
-    int end_vertex = 34018;
+    int end_vertex = 8392;
 
     struct timespec start_S, end_S, start_P, end_P;
     double timeElapsed_serial, timeElapsed_parallel;
@@ -43,17 +43,16 @@ int main() {
     // printAdjacencyMatrix(&g1);
     // printAdjacencyMatrix(&g2);
 
-    printf("\nRunning Serial BFS\n");
+    printf("\nExecuting Serial BFS\n");
     clock_gettime(CLOCK_REALTIME, &start_S);
     foundSerial = bfsSearch(&g1, start_vertex, end_vertex);
     clock_gettime(CLOCK_REALTIME, &end_S);
 
-    printf("\nRunning Parallel BFS\n");
+    printf("Executing Parallel BFS\n");
     clock_gettime(CLOCK_REALTIME, &start_P);
     foundParallel = bfsSearch_OMP(&g2, start_vertex, end_vertex);
     clock_gettime(CLOCK_REALTIME, &end_P);
     
-
     if (foundSerial){
         timeElapsed_serial = interval(start_S, end_S);
         printf("\nSerial time   : %f seconds\n", timeElapsed_serial);
@@ -61,7 +60,7 @@ int main() {
     }
     if (foundParallel){
         timeElapsed_parallel = interval(start_P, end_P);
-        printf("\nParallel time : %f seconds\n", timeElapsed_parallel);
+        printf("Parallel time : %f seconds\n", timeElapsed_parallel);
         printf("\nSpeedup : %.2f\n\n", timeElapsed_serial/timeElapsed_parallel);
     }
     else{
