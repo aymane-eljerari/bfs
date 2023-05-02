@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "include/bfs.h"
 #include "include/graph.h"
 #include "include/queue.h"
 

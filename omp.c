@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <omp.h>
 
-#include "include/bfs.h"
 #include "include/graph.h"
 #include "include/queue.h"
 
