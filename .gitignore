@@ -3,4 +3,4 @@ bfs
 *.o
 .DS_Store
 out
-.vscode
+.vscode/
