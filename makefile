@@ -45,7 +45,7 @@ CC=gcc
 CFLAGS=-Wall
 OMPFLAG="-I/opt/homebrew/opt/libomp/include"
 
-SOURCES=graph.c queue.c bfs.c 
+SOURCES=graph.c queue.c bfs.c omp.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=bfs
 
@@ -62,6 +62,9 @@ graph.o: graph.c
 
 bfs.o: bfs.c graph.c queue.c
 	$(CC) $(OMPFLAG) -fopenmp $(CFLAGS) -c bfs.c -o bfs.o
+
+omp.o: omp.c graph.c queue.c
+	$(CC) $(OMPFLAG) -fopenmp $(CFLAGS) -c omp.c -o omp.o
 
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)

@@ -7,6 +7,7 @@
 #include "include/graph.h"
 #include "include/queue.h"
 #include "include/bfs.h"
+#include "include/omp.h"
 
 double interval(struct timespec start, struct timespec end){
   struct timespec temp;
@@ -43,25 +44,25 @@ int main() {
 
     printf("\nExecuting Serial BFS\n");
     clock_gettime(CLOCK_REALTIME, &start);
-    foundSerial = bfsSearch(&g1, start_vertex, end_vertex);
+    foundSerial = bfs(&g1, start_vertex, end_vertex);
     clock_gettime(CLOCK_REALTIME, &end);
     time_serial = interval(start, end);
 
     printf("Executing 2 Thread Parallel BFS\n");
     clock_gettime(CLOCK_REALTIME, &start);
-    foundParallel2 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 2);
+    foundParallel2 = bfs_OMP(&g1, start_vertex, end_vertex, 2);
     clock_gettime(CLOCK_REALTIME, &end);
     time_parallel2 = interval(start, end);
 
     printf("Executing 4 Thread Parallel BFS\n");
     clock_gettime(CLOCK_REALTIME, &start);
-    foundParallel4 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 4);
+    foundParallel4 = bfs_OMP(&g1, start_vertex, end_vertex, 4);
     clock_gettime(CLOCK_REALTIME, &end);
     time_parallel4 = interval(start, end);
     
     printf("Executing 8 Thread Parallel BFS\n");
     clock_gettime(CLOCK_REALTIME, &start);
-    foundParallel8 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 8);
+    foundParallel8 = bfs_OMP(&g1, start_vertex, end_vertex, 8);
     clock_gettime(CLOCK_REALTIME, &end);
     time_parallel8 = interval(start, end);
     
