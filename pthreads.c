@@ -6,8 +6,6 @@
 #include "include/graph.h"
 #include "include/queue.h"
 
-#define NUM_THREADS 4 
-
 typedef struct {
     Graph *g;
     Queue *q;

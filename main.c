@@ -26,11 +26,19 @@ double interval(struct timespec start, struct timespec end){
 int main() {
     Graph g1;
 
-    int vertexCount = 60000;
-    int maxDegree = 20;
+    // int vertexCount = 100000;
+    // int maxDegree = 100;
+
+    // int start_vertex = 0;
+    // int end_vertex = 99396;
+
+    int vertexCount = 200000;
+    int kNeighbors = 50;
 
     int start_vertex = 0;
-    int end_vertex = 49392;
+    int end_vertex = 199396;
+
+
 
     struct timespec start, end;
     double time_serial, time_omp2, time_omp4, time_omp8, time_pt2, time_pt4, time_pt8;
@@ -39,9 +47,9 @@ int main() {
     
 
     printf("\nGenerating Graph with %d vertices..\n", vertexCount);
-    generate(&g1, vertexCount, maxDegree);
     
-    // printAdjacencyMatrix(&g1);
+    generateKNeighbors(&g1, vertexCount, maxDegree);
+    
 
     printf("\nExecuting BFS Serial\n\n");
     clock_gettime(CLOCK_REALTIME, &start);
@@ -87,33 +95,33 @@ int main() {
 
     
     if (foundSerial){
-        printf("\nSerial time   : %f seconds\n", time_serial);
+        printf("\nSerial time       : %f seconds\n\n", time_serial);
     }
     if (foundOMP2){
-        printf("OMP time 2 threads: %f seconds\n", time_omp2);
-        printf("Speedup : %.2f\n\n", time_serial/time_omp2);
+        printf("OMP time 2 threads  : %f seconds\n", time_omp2);
+        printf("Speedup             : %.2f\n\n", time_serial/time_omp2);
     }
     if (foundOMP4){
-        printf("OMP time 4 threads: %f seconds\n", time_omp4);
-        printf("Speedup : %.2f\n\n", time_serial/time_omp4);
+        printf("OMP time 4 threads  : %f seconds\n", time_omp4);
+        printf("Speedup             : %.2f\n\n", time_serial/time_omp4);
     }
     if (foundOMP8){
-        printf("OMP time 8 threads: %f seconds\n", time_omp8);
-        printf("Speedup : %.2f\n\n", time_serial/time_omp8);
+        printf("OMP time 8 threads  : %f seconds\n", time_omp8);
+        printf("Speedup             : %.2f\n\n", time_serial/time_omp8);
     }
     if (foundPT2){
-        printf("PThread 2 time: %f seconds\n", time_pt2);
-        printf("Speedup : %.2f\n\n", time_serial/time_pt2);
+        printf("PThread 2 time      : %f seconds\n", time_pt2);
+        printf("Speedup             : %.2f\n\n", time_serial/time_pt2);
     }
     if (foundPT4){
-        printf("PThread 4 time: %f seconds\n", time_pt4);
-        printf("Speedup : %.2f\n\n", time_serial/time_pt4);
+        printf("PThread 4 time      : %f seconds\n", time_pt4);
+        printf("Speedup             : %.2f\n\n", time_serial/time_pt4);
     }
     if (foundPT8){
-        printf("PThread 8 time: %f seconds\n", time_pt8);
-        printf("Speedup : %.2f\n\n", time_serial/time_pt8);
+        printf("PThread 8 time      : %f seconds\n", time_pt8);
+        printf("Speedup             : %.2f\n\n", time_serial/time_pt8);
     }
-    else{
+    else {
         printf("\nCould not find vertex\n");
     }
     
