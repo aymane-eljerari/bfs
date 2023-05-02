@@ -8,6 +8,7 @@
 
 /* Graph operations */
 void initGraph(Graph *g, int vertexCount) {
+    // Initializes graph
     int i;
     g->vertexCount = vertexCount;
     g->adjMatrix = (int**)malloc(vertexCount * sizeof(int*));
@@ -17,11 +18,13 @@ void initGraph(Graph *g, int vertexCount) {
 }
 
 void addEdge(Graph *g, int src, int dest) {
+    // Adds edge between src and dest vertices
     g->adjMatrix[src][dest] = 1;
     g->adjMatrix[dest][src] = 1;
 }
 
-void generate(Graph *g, int vertexCount, int maxDegree) {
+void generateRandom(Graph *g, int vertexCount, int maxDegree) {
+    // Generates Random Graph
     int i, j;
     initGraph(g, vertexCount);
     
@@ -29,7 +32,7 @@ void generate(Graph *g, int vertexCount, int maxDegree) {
     else{srand(SEED);}
 
     for (i = 0; i < vertexCount; i++) {
-        int degree = rand() % maxDegree;
+        int degree = (rand() % maxDegree) + 1;
         for (j = 0; j < degree; j++) {
             int dest = rand() % vertexCount;
             if (i != dest && g->adjMatrix[i][dest] == 0) {
@@ -39,7 +42,33 @@ void generate(Graph *g, int vertexCount, int maxDegree) {
     }
 }
 
+void generateKNeighbors(Graph *g, int vertexCount, int k) {
+    // Generates Graph st. each random edge added is within k neighbors
+    int i, j;
+    initGraph(g, vertexCount);
+
+    if (RANDOM_GENERATE) {
+        srand(time(NULL));
+    } else {
+        srand(SEED);
+    }
+
+    for (i = 0; i < vertexCount; i++) {
+        int start = i - k < 0 ? 0 : i - k;
+        int end = i + k >= vertexCount ? vertexCount - 1 : i + k;
+        int degree = rand() % (end - start + 1);
+
+        for (j = 0; j < degree; j++) {
+            int dest = rand() % (end - start + 1) + start;
+            if (i != dest && g->adjMatrix[i][dest] == 0) {
+                addEdge(g, i, dest);
+            }
+        }
+    }
+}
+
 void printAdjacencyMatrix(Graph *g) {
+    // Print the adjacency matrix of the graph
     int i, j, k;
 
     printf("\nAdjacency Matrix:\n\n   ");  
