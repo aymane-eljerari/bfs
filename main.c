@@ -22,46 +22,65 @@ double interval(struct timespec start, struct timespec end){
 
 /* Test the algorithm */
 int main() {
-    Graph g1, g2;
+    Graph g1;
 
-    int vertexCount = 10000;
-    int maxDegree = 25;
+    int vertexCount = 60000;
+    int maxDegree = 20;
 
     int start_vertex = 0;
-    int end_vertex = 8392;
+    int end_vertex = 49392;
 
-    struct timespec start_S, end_S, start_P, end_P;
-    double timeElapsed_serial, timeElapsed_parallel;
+    struct timespec start, end;
+    double time_serial, time_parallel2, time_parallel4, time_parallel8;
 
-    bool foundSerial, foundParallel;
+    bool foundSerial, foundParallel2, foundParallel4, foundParallel8;
     
 
     printf("\nGenerating Graph with %d vertices..\n", vertexCount);
     generate(&g1, vertexCount, maxDegree);
-    generate(&g2, vertexCount, maxDegree);
     
     // printAdjacencyMatrix(&g1);
-    // printAdjacencyMatrix(&g2);
 
     printf("\nExecuting Serial BFS\n");
-    clock_gettime(CLOCK_REALTIME, &start_S);
+    clock_gettime(CLOCK_REALTIME, &start);
     foundSerial = bfsSearch(&g1, start_vertex, end_vertex);
-    clock_gettime(CLOCK_REALTIME, &end_S);
+    clock_gettime(CLOCK_REALTIME, &end);
+    time_serial = interval(start, end);
 
-    printf("Executing Parallel BFS\n");
-    clock_gettime(CLOCK_REALTIME, &start_P);
-    foundParallel = bfsSearch_OMP(&g2, start_vertex, end_vertex);
-    clock_gettime(CLOCK_REALTIME, &end_P);
+    printf("Executing 2 Thread Parallel BFS\n");
+    clock_gettime(CLOCK_REALTIME, &start);
+    foundParallel2 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 2);
+    clock_gettime(CLOCK_REALTIME, &end);
+    time_parallel2 = interval(start, end);
+
+    printf("Executing 4 Thread Parallel BFS\n");
+    clock_gettime(CLOCK_REALTIME, &start);
+    foundParallel4 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 4);
+    clock_gettime(CLOCK_REALTIME, &end);
+    time_parallel4 = interval(start, end);
+    
+    printf("Executing 8 Thread Parallel BFS\n");
+    clock_gettime(CLOCK_REALTIME, &start);
+    foundParallel8 = bfsSearch_OMP(&g1, start_vertex, end_vertex, 8);
+    clock_gettime(CLOCK_REALTIME, &end);
+    time_parallel8 = interval(start, end);
+    
     
     if (foundSerial){
-        timeElapsed_serial = interval(start_S, end_S);
-        printf("\nSerial time   : %f seconds\n", timeElapsed_serial);
+        printf("\nSerial time   : %f seconds\n", time_serial);
 
     }
-    if (foundParallel){
-        timeElapsed_parallel = interval(start_P, end_P);
-        printf("Parallel time : %f seconds\n", timeElapsed_parallel);
-        printf("\nSpeedup : %.2f\n\n", timeElapsed_serial/timeElapsed_parallel);
+    if (foundParallel2){
+        printf("Parallel time 2 threads: %f seconds\n", time_parallel2);
+        printf("\nSpeedup : %.2f\n\n", time_serial/time_parallel2);
+    }
+    if (foundParallel4){
+        printf("Parallel time 4 threads: %f seconds\n", time_parallel4);
+        printf("\nSpeedup : %.2f\n\n", time_serial/time_parallel4);
+    }
+    if (foundParallel8){
+        printf("Parallel time 8 threads: %f seconds\n", time_parallel8);
+        printf("\nSpeedup : %.2f\n\n", time_serial/time_parallel8);
     }
     else{
         printf("\nCould not find vertex\n");
