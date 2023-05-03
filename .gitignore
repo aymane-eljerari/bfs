@@ -4,3 +4,4 @@ bfs
 .DS_Store
 out
 .vscode/
+.nfs*
