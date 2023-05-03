@@ -5,3 +5,4 @@ bfs
 out
 .vscode/
 .nfs*
+data.csv

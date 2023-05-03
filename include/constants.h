@@ -1,13 +1,13 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define MAX_QUEUE_SIZE 10000000
+#define MAX_QUEUE_SIZE 100000
 #define RANDOM_GENERATE 0 // Whether to generate randomly or wrt to SEED.
-#define SEED 42
+#define SEED 45
 
 
 
-#define NUM_THREADS 8
+#define NUM_THREADS 2
 
 /*
     Generate Parameters through quadratic equation                
@@ -19,11 +19,12 @@
 
 #define A 500
 #define B 1000
-#define C 50
+#define C 51
 
 #define P1 0.15
-#define P3 0.85
+#define P2 0.25
+#define P3 0.35
 
-#define P_LENGTH 2
+#define P_LENGTH 3
 
 #endif

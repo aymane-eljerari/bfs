@@ -25,10 +25,10 @@ double interval(struct timespec start, struct timespec end){
 /* Test the algorithm */
 int main() {
 
-  double percentageList[] = {0.25, 0.50, 0.75};
+  double percentageList[] = {P1, P2, P3};
 
   int minVertexCount = C;
-  int maxVertexCount = (A * NUM_TESTS *  NUM_TESTS) + (B * NUM_TESTS) + C;
+  int maxVertexCount = (A * (NUM_TESTS-1) *  (NUM_TESTS-1)) + (B * (NUM_TESTS-1)) + C;
   
   printf("\nPerforming Computations on %d graph sizes", NUM_TESTS);
   printf("\nVertex Number Count Range     : %d -> %d\n\n", minVertexCount, maxVertexCount);
@@ -89,15 +89,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
@@ -131,15 +131,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
@@ -174,15 +174,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
@@ -218,15 +218,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
@@ -261,15 +261,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
@@ -304,15 +304,15 @@ int main() {
       printf("\nrow_length, ");
       for (a = 0 ; a < P_LENGTH; a++){
         if (a != 0) printf(", ");
-        printf("%d", (int)(percentageList[a]*100));
+        printf("%d%%", (int)(percentageList[a]*100));
       }
-      printf("\n\n");
+      printf("\n");
 
       for (b = 0; b < NUM_TESTS && (n = A*b*b + B*b + C); b++){
         printf("%d, ", n);
         for (c = 0 ; c < P_LENGTH; c++){
           if (c != 0) printf(", ");
-          printf("%.5f", time_stamp[b][c]);
+          printf("%.8f", time_stamp[b][c]);
         }
         printf("\n");
       }
