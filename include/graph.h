@@ -8,8 +8,9 @@ typedef struct {
 
 void initGraph(Graph *g, int vertexCount);
 void addEdge(Graph *g, int src, int dest);
-void generate(Graph *g, int vertexCount, int maxDegree);
+void generateRandom(Graph *g, int vertexCount, int degree);
 void printAdjacencyMatrix(Graph *g);
 void generateKNeighbors(Graph *g, int vertexCount, int k);
+void freeGraph(Graph *g);
 
 #endif

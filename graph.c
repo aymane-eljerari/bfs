@@ -23,7 +23,7 @@ void addEdge(Graph *g, int src, int dest) {
     g->adjMatrix[dest][src] = 1;
 }
 
-void generateRandom(Graph *g, int vertexCount, int maxDegree) {
+void generateRandom(Graph *g, int vertexCount, int degree) {
     // Generates Random Graph
     int i, j;
     initGraph(g, vertexCount);
@@ -32,7 +32,6 @@ void generateRandom(Graph *g, int vertexCount, int maxDegree) {
     else{srand(SEED);}
 
     for (i = 0; i < vertexCount; i++) {
-        int degree = (rand() % maxDegree) + 1;
         for (j = 0; j < degree; j++) {
             int dest = rand() % vertexCount;
             if (i != dest && g->adjMatrix[i][dest] == 0) {
@@ -90,4 +89,13 @@ void printAdjacencyMatrix(Graph *g) {
         }
         printf("\n");
     }
+}
+
+void freeGraph(Graph *g) {
+    // Frees the memory taken up by the graph
+    int i;
+    for (i = 0; i < g->vertexCount; i++) {
+        free(g->adjMatrix[i]);
+    }
+    free(g->adjMatrix);
 }
