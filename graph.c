@@ -24,7 +24,6 @@ void addEdge(Graph *g, int src, int dest) {
 }
 
 void generateRandom(Graph *g, int vertexCount, int degree) {
-    // Generates Random Graph
     int i, j;
     initGraph(g, vertexCount);
     
@@ -42,7 +41,6 @@ void generateRandom(Graph *g, int vertexCount, int degree) {
 }
 
 void generateKNeighbors(Graph *g, int vertexCount, int k) {
-    // Generates Graph st. each random edge added is within k neighbors
     int i, j;
     initGraph(g, vertexCount);
 

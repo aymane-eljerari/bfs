@@ -47,19 +47,17 @@ int main() {
   Random      |       0      |       1      |       2       |
   K Neighbors |       3      |       4      |       5       |
 
-  * Parallel Algorithms testes with NUM_THREADS above
+  * Parallel Algorithms are tested with NUM_THREADS above
 
   */
 
 
   Graph g;
-  struct timespec start, end, startTotal, endTotal;
+  struct timespec start, end;
   bool found;
 
   int c, n;
   
-  clock_gettime(CLOCK_REALTIME, &startTotal);
-
   for (c = 6; c >= 0; c--) {
     if (c == 5){
       printf("Executing %d PThreads - K Neighbors\n\n", NUM_THREADS);
@@ -70,9 +68,10 @@ int main() {
         printf("ITERATIONS %d\n", x);
         for (p = 0; p < P_LENGTH; p++){
           generateKNeighbors(&g, n, (int)(percentageList[p] * n));
+          
           // Pick start and End Vertices
           int vS = 0;
-          int vE = n - (n*0.05);
+          int vE = (int)n - (n*0.01);
 
           clock_gettime(CLOCK_REALTIME, &start);
           found = bfs_PTH(&g, vS, vE, NUM_THREADS);
@@ -320,105 +319,7 @@ int main() {
       
     }
   }
-    clock_gettime(CLOCK_REALTIME, &startTotal);
-    printf("Total Time: %.2f seconds\n", interval(startTotal, endTotal));
+
     return 0;
-  
-    // Graph g1;
-
-    // int NUM_TESTS = 90000;
-    // int maxDegree = 5000;
-
-    // int start_vertex = 0;
-    // int end_vertex = 87996;
-
-    // struct timespec start, end;
-    // double time_serial, time_omp2, time_omp4, time_omp8, time_pt2, time_pt4, time_pt8;
-
-    // bool foundSerial, foundOMP2, foundOMP4, foundOMP8, foundPT2, foundPT4, foundPT8;
-    
-
-    // printf("\nGenerating Graph with %d vertices..\n", NUM_TESTS);
-    
-    // generateKNeighbors(&g1, NUM_TESTS, maxDegree);
-    // generateKNeighbors(&g1, NUM_TESTS, maxDegree);
-  
-
-    // printf("\nExecuting BFS: Serial\n\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundSerial = bfs(&g1, start_vertex, end_vertex);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_serial = interval(start, end);
-
-    // printf("Executing BFS: 2 Thread OMP\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundOMP2 = bfs_OMP(&g1, start_vertex, end_vertex, 2);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_omp2 = interval(start, end);
-
-    // printf("Executing BFS: 4 Thread OMP\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundOMP4 = bfs_OMP(&g1, start_vertex, end_vertex, 4);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_omp4 = interval(start, end);
-    
-    // printf("Executing BFS: 8 Thread OMP\n\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundOMP8 = bfs_OMP(&g1, start_vertex, end_vertex, 8);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_omp8 = interval(start, end);
-    
-    // printf("Executing BFS: 2 PThreads\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundPT2 = bfs_PTH(&g1, start_vertex, end_vertex, 2);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_pt2 = interval(start, end);
-
-    // printf("Executing BFS: 4 PThreads\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundPT4 = bfs_PTH(&g1, start_vertex, end_vertex, 4);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_pt4 = interval(start, end);
-
-    // printf("Executing BFS: 8 PThreads\n");
-    // clock_gettime(CLOCK_REALTIME, &start);
-    // foundPT8 = bfs_PTH(&g1, start_vertex, end_vertex, 8);
-    // clock_gettime(CLOCK_REALTIME, &end);
-    // time_pt8 = interval(start, end);
-
-    
-    // if (foundSerial){
-    //     printf("\nSerial time         : %f seconds\n\n", time_serial);
-    // }
-    // if (foundOMP2){
-    //     printf("OMP time 2 threads  : %f seconds\n", time_omp2);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_omp2);
-    // }
-    // if (foundOMP4){
-    //     printf("OMP time 4 threads  : %f seconds\n", time_omp4);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_omp4);
-    // }
-    // if (foundOMP8){
-    //     printf("OMP time 8 threads  : %f seconds\n", time_omp8);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_omp8);
-    // }
-    // if (foundPT2){
-    //     printf("PThread 2 time      : %f seconds\n", time_pt2);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_pt2);
-    // }
-    // if (foundPT4){
-    //     printf("PThread 4 time      : %f seconds\n", time_pt4);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_pt4);
-    // }
-    // if (foundPT8){
-    //     printf("PThread 8 time      : %f seconds\n", time_pt8);
-    //     printf("Speedup             : %.2f\n\n", time_serial/time_pt8);
-    // }
-    // else {
-    //     int found = foundSerial + foundOMP2 + foundOMP4 + foundOMP8 + foundPT2 + foundPT4 + foundPT8;
-    //     printf("%d functions found a path\n", found);
-    //     printf("\nVertices %d and %d are not connected\n", start_vertex, end_vertex);
-    // }
-    
     
 }

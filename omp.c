@@ -20,7 +20,7 @@ bool bfs_OMP(Graph *g, int startVertex, int targetVertex, int numThreads) {
     visited[startVertex] = true;
     enqueue(&q, startVertex);
 
-    bool found = false; // shared variable to indicate whether targetVertex has been found
+    bool found = false; 
 
     while (!isQueueEmpty(&q)) {
         int currVertex = dequeue(&q);
@@ -37,7 +37,7 @@ bool bfs_OMP(Graph *g, int startVertex, int targetVertex, int numThreads) {
         }
 
         if (found) {
-            break; // exit the while loop early if targetVertex has been found
+            break; 
         }
     }
 
