@@ -28,7 +28,7 @@ e.g. A matrix of size 100 by 100 containing 15 edges per vertex would have a 15%
 
 <a name="_page3_x72.00_y299.07"></a>This function uses the degree input to generate graphs such that each vertex has precise *degree* connections with other vertices.
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.001.png)
+![](images/image10.png)
 
 **Figure 1:** generateRandom() code snippet
 
@@ -36,7 +36,7 @@ e.g. A matrix of size 100 by 100 containing 15 edges per vertex would have a 15%
 
 This function only adds edges between vertices within k neighbors of the current vertex and generates diagonal-looking connections.
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.002.png)
+![](images/image6.png)
 
 **Figure 2:** generateKNeighbors() code snippet
 
@@ -46,7 +46,7 @@ This function only adds edges between vertices within k neighbors of the current
 
 The function receives three inputs, graph *G*, start and target vertices. The graph traversal is performed within the while loop. The current vertex being processed is the most recent dequeued vertex. While the queue is not empty, we enqueue all nodes connected to the current vertex and mark them as visited to avoid processing them a second time.
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.003.png)
+![](images/image4.png)
 
 **Figure 3:** Serial algorithm code snippet
 
@@ -96,7 +96,7 @@ The serial version takes longer to execute graphs with higher percentages, as it
 |53251|7\.381782|6\.430583|12\.295214|
 <br>
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.004.jpeg)
+![](images/image1.png)
 
 **Figure 6:** Serial performance on different graphs
 
@@ -106,7 +106,7 @@ In Figure 6, the execution of the K Neighbors graphs are more predictable than t
 
 <a name="_page8_x72.00_y72.00"></a>Similar to the serial version, we initialize the required data structures before beginning with the graph traversal. For every dequeued vertex, we partition the loop across all threads to process simultaneously. Parallelizing the graph traversal allows for a faster search since more threads are more likely to find the target vertex, thus executing faster.
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.005.png)
+![](images/image2.png)
 
 **Figure 7:** OpenMP algorithm code snippet
 
@@ -177,7 +177,7 @@ In Figure 6, the execution of the K Neighbors graphs are more predictable than t
 |53251|1\.83200852|1\.71929035|1\.54666316|
 <br>
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.006.jpeg)
+![](images/image7.png)
 
 **Figure 11:** OpenMP speedup compared to serial version
 
@@ -188,13 +188,13 @@ Using two threads, we notice a 1.6x speedup over the serial version, the four th
 
 The PThreads implementation is more efficient than the OpenMP implementation because it allows for more fine-grained control over the shared resources and synchronization between threads. In the pthreads implementation, a mutex controls access to the shared queue and the shared "found" variable that indicates the found target vertex. Each thread acquires the mutex, dequeues a vertex, processes its neighbors, and updates the shared data structures in a critical section protected by the mutex. This approach ensures that only one thread can access the shared data structures at a time, eliminating the possibility of data races and other synchronization issues.
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.007.png)
+![](images/image3.png)
 
 **Figure 12:** PThreads algorithm code snippet
 
 <br>
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.008.png)
+![](images/image8.png)
 
 **Figure 13:** PThreads thread algorithm code snippet
 
@@ -263,9 +263,9 @@ The PThreads implementation is more efficient than the OpenMP implementation bec
 |53251|0\.962783|1\.038433|1\.093599|
 <br>
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.009.jpeg)
+![](images/image5.png)
 
-**Figure 17:** OpenMP speedup compared to serial version
+**Figure 17:** PThreads speedup compared to serial version
 
 Overall, the PThreads implementation achieved better performance across all numbers of threads. But we notice certain performance drops at seemingly random row sizes.
 
@@ -307,6 +307,6 @@ make clean && make && ./bfs
 
 # 7. Program<a name="_page18_x72.00_y249.17"></a> Structure
 
-![](img/Aspose.Words.51f4ceca-6222-4fd4-9e6f-b96533b225cf.010.png)
+![](images/image9.png)
 
 **Figure 18:** Project folder structure
